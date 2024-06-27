@@ -5,6 +5,7 @@
   "author": "vekat",
   "dependencies": {
     "discord.js": "^14.15.3",
+    "json2md": "^2.0.1",
     "jsum": "^2.0.0-alpha.4"
   }
 }

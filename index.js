@@ -1,6 +1,13 @@
 const fs = require('fs')
 const Discord = require('discord.js')
 const jsum = require('jsum')
+const json2md = require('json2md')
+
+json2md.converters.categories = (input, parser) => `# Categories\n\n${input.map((v, i) => `## Category \#${i+1}\n\n${parser(v)}`).join('\n')}`
+json2md.converters.c = (input, _) => `### Channels\n\n${input.map((v) => `- \`${v}\``).join('\n')}`
+json2md.converters.o = (input, parser) => (input.length === 0) ? '' : `### Overwrites\n\n${Object.entries(input).map(([role, overwrites]) => `#### Role \`${role}\`\n\n${parser(overwrites)}`).join('\n')}`
+json2md.converters.a = (input, _) => (input.length === 0) ? '' : `Allow:\n\n${input.map((v) => `- \`${v}\``).join('\n')}`
+json2md.converters.d = (input, _) => (input.length === 0) ? '' : `\nDeny:\n\n${input.map((v) => `- \`${v}\``).join('\n')}`
 
 const { USER_ID, TOKEN } = process.env
 
@@ -55,6 +62,7 @@ async function handleRecord(message, _) {
   }
 
   fs.writeFileSync('categories.json', JSON.stringify(json, null, 2))
+  fs.writeFileSync('categories.md', json2md(json))
   console.log('> categories saved')
 }
 
